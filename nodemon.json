@@ -1,0 +1,9 @@
+{
+    "env": {
+        "DB_USER": "Abhijeet",
+        "DB_PASSWORD": "xkWrCSf26HQxCOV9",
+        "DB_NAME": "mern_dev",
+        "JWT_KEY": "supersecret_key_dont_share",
+        "GOOGLE_API_KEY": "..."
+    }
+}
