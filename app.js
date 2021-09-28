@@ -2,19 +2,18 @@ const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const placesRoutes = require('./routes/places-routes');
 const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/http-error');
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vemlw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
-
+const URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vemlw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
+const PORT = process.env.PORT || 5000
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
@@ -50,13 +49,15 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || 'An unknown error occurred!' });
 });
 
-mongoose
-  .connect(
-    uri
-  )
+mongoose.connect(URI, {  
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: true, 
+  })
   .then(() => {
-    app.listen(process.env.PORT || 5000);
+    app.listen(PORT);
   })
   .catch(err => {
-    console.log(err);
+    console.error(err.message);
   });
